@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+pip-wheel-metadata/
+.installed.cfg
+*.egg-info
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# uv
+.uv/
+uv.lock
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Ruff
+.ruff_cache/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# AI coding tools - never commit these
+.cursor/
+.cursorignore
+.cursorules
+CLAUDE.md
+claude.md
+.claude/
+.aider/
+.aider.tags.cache.v3/
+aider.conf.yml
+.continue/
+.copilot/
+.github/copilot-instructions.md
+*.cursorrules
+
+# Environment files - never commit secrets
+.env
+.env.*
+!.env.example
+
+# Distribution
+*.tar.gz
+*.whl
+
+# docs
+docs/ENGINEERING_GOLDEN_STANDARD.md
