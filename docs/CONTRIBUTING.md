@@ -77,4 +77,4 @@ Open a GitHub issue with:
 
 ## Questions
 
-Email hello@scrift.app or open a GitHub discussion.
+Email hello@phazeo.com or open a GitHub discussion.
