@@ -7,12 +7,13 @@ from typing import TYPE_CHECKING
 import httpx
 import pytest
 
-from scrift import NotFoundError, Scrift, ValidationError
+from scrift import NotFoundError, Scrift, ServiceColor, SvgVariant, ValidationError
 from tests.conftest import (
     ERROR_NOT_FOUND,
     ERROR_VALIDATION,
     RATE_HEADERS,
     SERVICE_JSON,
+    SERVICE_JSON_WITH_VARIANTS,
 )
 
 if TYPE_CHECKING:
@@ -35,6 +36,41 @@ class TestCatalogGet:
         result = client.catalog.get("stripe")
         assert result.brand_color == "635BFF"
         assert result.dark_mode_color == "7A73FF"
+
+    def test_svg_variants_none_by_default(
+        self, respx_mock: respx.MockRouter, client: Scrift
+    ) -> None:
+        respx_mock.get("https://api.scrift.app/v1/catalog/stripe").mock(
+            return_value=httpx.Response(200, json=SERVICE_JSON)
+        )
+        result = client.catalog.get("stripe")
+        assert result.svg_variants is None
+        assert result.colors is None
+
+    def test_svg_variants_typed(self, respx_mock: respx.MockRouter, client: Scrift) -> None:
+        respx_mock.get("https://api.scrift.app/v1/catalog/stripe").mock(
+            return_value=httpx.Response(200, json=SERVICE_JSON_WITH_VARIANTS)
+        )
+        result = client.catalog.get("stripe")
+        assert result.svg_variants is not None
+        assert len(result.svg_variants) == 2
+        assert isinstance(result.svg_variants[0], SvgVariant)
+        assert result.svg_variants[0].variant == "mono"
+        assert result.svg_variants[0].verified is True
+        assert result.svg_variants[1].variant == "color"
+        assert result.svg_variants[1].verified is False
+
+    def test_colors_typed(self, respx_mock: respx.MockRouter, client: Scrift) -> None:
+        respx_mock.get("https://api.scrift.app/v1/catalog/stripe").mock(
+            return_value=httpx.Response(200, json=SERVICE_JSON_WITH_VARIANTS)
+        )
+        result = client.catalog.get("stripe")
+        assert result.colors is not None
+        assert len(result.colors) == 2
+        assert isinstance(result.colors[0], ServiceColor)
+        assert result.colors[0].role == "primary"
+        assert result.colors[0].hex == "#635BFF"
+        assert result.colors[0].source == "official"
 
     def test_css_vars_mapping(self, respx_mock: respx.MockRouter, client: Scrift) -> None:
         respx_mock.get("https://api.scrift.app/v1/catalog/stripe").mock(

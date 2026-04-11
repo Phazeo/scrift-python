@@ -36,12 +36,30 @@ class CatalogResource:
         offset: int = 0,
     ) -> CatalogListResponse:
         """List catalog entries with pagination."""
+        if limit < 1:
+            msg = "limit must be >= 1"
+            raise ValueError(msg)
+        if limit > 200:
+            msg = "limit must be <= 200"
+            raise ValueError(msg)
+        if offset < 0:
+            msg = "offset must be >= 0"
+            raise ValueError(msg)
         params: dict[str, object] = {"limit": limit, "offset": offset}
         response = self._http.get("/v1/catalog", params=params)
         return catalog_list_response_from_http(response)
 
     def batch(self, slugs: builtins.list[str]) -> BatchResponse:
         """Look up multiple brands by slug (max 50)."""
+        if not slugs:
+            msg = "slugs must be a non-empty list"
+            raise ValueError(msg)
+        if len(slugs) > 50:
+            msg = f"batch() accepts at most 50 slugs, got {len(slugs)}"
+            raise ValueError(msg)
+        if any(not isinstance(s, str) or not s.strip() for s in slugs):
+            msg = "every slug must be a non-empty string"
+            raise ValueError(msg)
         response = self._http.post("/v1/catalog/batch", json={"slugs": slugs})
         return batch_response_from_http(response)
 

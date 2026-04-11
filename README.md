@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Python SDK for the [Scrift](https://scrift.app) brand asset API. Fetch brand colours, SVG logos, raster exports, and metadata for thousands of companies — one API call at a time.
+Python SDK for the [Scrift](https://scrift.app) brand asset API. Fetch brand colours, SVG logos, raster exports, and metadata for thousands of companies - one API call at a time.
 
 ## Installation
 

@@ -7,6 +7,23 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-04-11
+
+### Fixed
+
+- `svg_variants` and `colors` fields on `ServiceResponse` typed correctly as
+  `list[SvgVariant] | None` and `list[ServiceColor] | None` (no longer `Any`)
+- Client-side validation on `batch()`, `list()`, `get_png()`, `get_webp()` - raises
+  `ValueError` before the HTTP call on invalid arguments
+- All four resource classes (`CatalogResource`, `SvgResource`, `BrandResource`,
+  `RasterResource`) now exported from `scrift.__init__`
+
+### Added
+
+- `SvgVariant` model (`variant: str`, `verified: bool`)
+- `ServiceColor` model (`role: str`, `hex: str`, `source: str`)
+- ADR-0001 documenting the single-retry-on-429 design decision
+
 ## [0.2.0] - 2026-04-08
 
 ### Added
