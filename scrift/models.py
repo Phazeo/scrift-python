@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -27,6 +26,25 @@ class CssVars(BaseModel):
     brand_color_contrast: str = Field(alias="--brand-color-contrast")
 
 
+class SvgVariant(BaseModel):
+    """Single SVG variant metadata (e.g. mono, color, dark)."""
+
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
+
+    variant: str
+    verified: bool
+
+
+class ServiceColor(BaseModel):
+    """Single color role for a service (e.g. primary, on-dark)."""
+
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
+
+    role: str
+    hex: str
+    source: str
+
+
 class ServiceResponse(BaseModel):
     """Single brand/service from the catalog."""
 
@@ -37,8 +55,8 @@ class ServiceResponse(BaseModel):
     name: str
     brand_color: str | None = Field(None, alias="brandColor")
     dark_mode_color: str | None = Field(None, alias="darkModeColor")
-    svg_variants: Any | None = Field(None, alias="svgVariants")
-    colors: Any | None = None
+    svg_variants: list[SvgVariant] | None = Field(None, alias="svgVariants")
+    colors: list[ServiceColor] | None = None
     css: CssVars | None = Field(None, alias="_css")
     notice: str | None = Field(None, alias="_notice")
     rate_limit: RateLimitInfo | None = None

@@ -47,6 +47,18 @@ SERVICE_JSON = {
     "_notice": "Provided by Scrift",
 }
 
+SERVICE_JSON_WITH_VARIANTS = {
+    **SERVICE_JSON,
+    "svgVariants": [
+        {"variant": "mono", "verified": True},
+        {"variant": "color", "verified": False},
+    ],
+    "colors": [
+        {"role": "primary", "hex": "#635BFF", "source": "official"},
+        {"role": "on-dark", "hex": "#7A73FF", "source": "community"},
+    ],
+}
+
 BRAND_JSON = {
     "id": 1,
     "slug": "stripe",
