@@ -7,6 +7,13 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-04-11
+
+### Removed
+
+- Legacy `sk_` API key prefixes removed from validation.
+  These prefixes no longer exist in the Scrift API. Pass a `scrf_*` key.
+
 ## [0.2.1] - 2026-04-11
 
 ### Fixed
@@ -35,8 +42,8 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
   parsed from `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
 - `ScriftRateLimitError` (alias `RateLimitError`) with `retry_after: int | None` on
   HTTP 429 after the automatic retry is exhausted
-- API key validation accepting `scrf_` + 8+ alphanumeric characters (plus legacy
-  `sk_live_` / `sk_test_` and other opaque key shapes)
+- API key validation accepting `scrf_` + 8+ alphanumeric characters
+  (and other opaque key shapes)
 
 ### Changed
 

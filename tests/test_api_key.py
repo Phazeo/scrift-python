@@ -12,8 +12,6 @@ from scrift import Scrift
     [
         "scrf_testkey123456",
         "scrf_int_internal0001",
-        "sk_" + "test" + "_abc123",
-        "sk_" + "live" + "_xyz789",
         "opaque_legacy_key_value_12345",
     ],
 )
