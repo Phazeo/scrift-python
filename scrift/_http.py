@@ -11,8 +11,8 @@ from scrift.exceptions import (
     APIError,
     AuthenticationError,
     NotFoundError,
-    RateLimitError,
     ScriftError,
+    ScriftRateLimitError,
     ValidationError,
 )
 
@@ -77,8 +77,12 @@ class HttpClient:
         response = self._client.request(method, path, params=params, json=json)
 
         if response.status_code == 429:
-            retry_after = _parse_retry_after(response)
-            delay = min(retry_after, _MAX_RETRY_AFTER_SECONDS) if retry_after is not None else 1.0
+            retry_after = _parse_retry_after_seconds(response)
+            delay = (
+                min(float(retry_after), _MAX_RETRY_AFTER_SECONDS)
+                if retry_after is not None
+                else 1.0
+            )
             time.sleep(delay)
             response = self._client.request(method, path, params=params, json=json)
 
@@ -91,7 +95,7 @@ class HttpClient:
         self._client.close()
 
 
-def _parse_retry_after(response: httpx.Response) -> float | None:
+def _parse_retry_after_seconds(response: httpx.Response) -> float | None:
     header = response.headers.get("Retry-After")
     if header is None:
         return None
@@ -99,6 +103,13 @@ def _parse_retry_after(response: httpx.Response) -> float | None:
         return float(header)
     except (ValueError, TypeError):
         return None
+
+
+def _retry_after_int(response: httpx.Response) -> int | None:
+    raw = _parse_retry_after_seconds(response)
+    if raw is None:
+        return None
+    return int(raw)
 
 
 def _raise_for_status(response: httpx.Response) -> NoReturn:
@@ -122,12 +133,11 @@ def _raise_for_status(response: httpx.Response) -> NoReturn:
     elif status == 422:
         exc_cls = ValidationError
     elif status == 429:
-        retry_after = _parse_retry_after(response)
-        raise RateLimitError(
+        raise ScriftRateLimitError(
             message,
             status_code=status,
             error_code=error_code,
-            retry_after=retry_after,
+            retry_after=_retry_after_int(response),
         )
     else:
         exc_cls = APIError

@@ -7,6 +7,7 @@ from scrift.exceptions import (
     NotFoundError,
     RateLimitError,
     ScriftError,
+    ScriftRateLimitError,
     ValidationError,
 )
 from scrift.models import (
@@ -14,9 +15,11 @@ from scrift.models import (
     BrandResponse,
     CatalogListResponse,
     CssVars,
+    RateLimitInfo,
     SearchResponse,
     ServiceResponse,
 )
+from scrift.resources.raster import RasterResource
 
 __all__ = [
     "APIError",
@@ -27,11 +30,14 @@ __all__ = [
     "CssVars",
     "NotFoundError",
     "RateLimitError",
+    "RasterResource",
+    "RateLimitInfo",
     "Scrift",
     "ScriftError",
+    "ScriftRateLimitError",
     "SearchResponse",
     "ServiceResponse",
     "ValidationError",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

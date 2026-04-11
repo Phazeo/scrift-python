@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import warnings
 
+from scrift._api_key import validate_api_key
 from scrift._http import HttpClient
 from scrift.resources.brand import BrandResource
 from scrift.resources.catalog import CatalogResource
+from scrift.resources.raster import RasterResource
 from scrift.resources.svg import SvgResource
 
 
@@ -17,7 +19,7 @@ class ScriftClient:
 
         from scrift import Scrift
 
-        client = Scrift(api_key="sk_live_...")
+        client = Scrift(api_key="scrf_...")
         brand = client.catalog.get("stripe")
     """
 
@@ -28,6 +30,10 @@ class ScriftClient:
         base_url: str | None = None,
         timeout: float | None = None,
     ) -> None:
+        # Closed until fully initialized so failed validation does not leave a half-built
+        # client that trips __del__ / ResourceWarning.
+        self._closed = True
+        validate_api_key(api_key)
         from scrift._http import _DEFAULT_BASE_URL, _DEFAULT_TIMEOUT
 
         self._http = HttpClient(
@@ -38,6 +44,7 @@ class ScriftClient:
         self._closed = False
         self.catalog = CatalogResource(self._http)
         self.svg = SvgResource(self._http)
+        self.raster = RasterResource(self._http)
         self.brand = BrandResource(self._http)
 
     def close(self) -> None:
