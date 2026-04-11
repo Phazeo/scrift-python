@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Python SDK for the [Scrift](https://scrift.app) brand asset API. Fetch brand colours, SVG logos, and metadata for thousands of companies - one API call at a time.
+Python SDK for the [Scrift](https://scrift.app) brand asset API. Fetch brand colours, SVG logos, raster exports, and metadata for thousands of companies — one API call at a time.
 
 ## Installation
 
@@ -15,10 +15,11 @@ pip install scrift
 ```python
 from scrift import Scrift
 
-with Scrift(api_key="sk_live_...") as client:
+with Scrift(api_key="scrf_...") as client:
     # Look up a single brand
     brand = client.catalog.get("stripe")
     print(brand.name, brand.brand_color)  # Stripe 635BFF
+    print(brand.rate_limit)  # RateLimitInfo from X-RateLimit-* headers (or None)
 
     # List the catalog
     page = client.catalog.list(limit=10)
@@ -37,6 +38,10 @@ with Scrift(api_key="sk_live_...") as client:
     # Fetch an SVG logo
     svg_bytes = client.svg.get("stripe", variant="dark")
 
+    # PNG / WebP (size is an API-defined enum, e.g. 32 … 512)
+    png_bytes = client.raster.get_png("stripe", size=128, variant="mono")
+    webp_bytes = client.raster.get_webp("stripe", size=256)
+
     # Look up a brand by domain
     info = client.brand.get("stripe.com")
     print(info.variants)  # ['color', 'mono', 'wordmark']
@@ -51,6 +56,8 @@ with Scrift(api_key="sk_live_...") as client:
 | `client.catalog.batch(slugs)` | Batch lookup (max 50) |
 | `client.catalog.search(query, limit=)` | Search by name (min 2 chars) |
 | `client.svg.get(slug, variant=)` | Raw SVG bytes |
+| `client.raster.get_png(slug, size=, variant=)` | Raw PNG bytes |
+| `client.raster.get_webp(slug, size=, variant=)` | Raw WebP bytes |
 | `client.brand.get(domain)` | Brand lookup by domain |
 
 ### SVG variants
@@ -62,7 +69,7 @@ with Scrift(api_key="sk_live_...") as client:
 ```python
 from scrift import Scrift, NotFoundError, RateLimitError
 
-with Scrift(api_key="sk_live_...") as client:
+with Scrift(api_key="scrf_...") as client:
     try:
         brand = client.catalog.get("nonexistent")
     except NotFoundError as e:
@@ -78,7 +85,7 @@ All exceptions inherit from `ScriftError` and carry `status_code`, `error_code`,
 | `AuthenticationError` | 401 |
 | `NotFoundError` | 404 |
 | `ValidationError` | 422 |
-| `RateLimitError` | 429 (auto-retries once, capped at 30s) |
+| `RateLimitError` (`ScriftRateLimitError`) | 429 (auto-retries once, capped at 30s) |
 | `APIError` | everything else |
 
 ## Links

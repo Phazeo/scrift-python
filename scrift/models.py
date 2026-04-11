@@ -2,9 +2,19 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+@dataclass(frozen=True, slots=True)
+class RateLimitInfo:
+    """Rate limit quota from response headers ``X-RateLimit-*``."""
+
+    limit: int | None
+    remaining: int | None
+    reset_at: int | None  # Unix timestamp
 
 
 class CssVars(BaseModel):
@@ -31,6 +41,7 @@ class ServiceResponse(BaseModel):
     colors: Any | None = None
     css: CssVars | None = Field(None, alias="_css")
     notice: str | None = Field(None, alias="_notice")
+    rate_limit: RateLimitInfo | None = None
 
 
 class BrandResponse(BaseModel):
@@ -46,6 +57,7 @@ class BrandResponse(BaseModel):
     variants: list[str] = Field(default_factory=list)
     css: CssVars | None = Field(None, alias="_css")
     notice: str | None = Field(None, alias="_notice")
+    rate_limit: RateLimitInfo | None = None
 
 
 class BatchResponse(BaseModel):
@@ -56,6 +68,7 @@ class BatchResponse(BaseModel):
     results: dict[str, ServiceResponse | None]
     found: int
     not_found: list[str] = Field(default_factory=list, alias="notFound")
+    rate_limit: RateLimitInfo | None = None
 
 
 class SearchResponse(BaseModel):
@@ -66,6 +79,7 @@ class SearchResponse(BaseModel):
     matches: list[ServiceResponse]
     query: str
     total: int
+    rate_limit: RateLimitInfo | None = None
 
 
 class CatalogListResponse(BaseModel):
@@ -77,3 +91,4 @@ class CatalogListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+    rate_limit: RateLimitInfo | None = None

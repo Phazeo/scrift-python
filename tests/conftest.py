@@ -2,15 +2,31 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
+import respx
 
 from scrift import Scrift
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+# Test-only API key shape (matches scrf_ + 8+ alnum).
+TEST_API_KEY = "scrf_testkey123456"
+
 
 @pytest.fixture
-def client(httpx_mock) -> Scrift:  # type: ignore[type-arg]
-    """Pre-configured Scrift client pointing at the mock transport."""
-    return Scrift(api_key="sk_test_abc123")
+def client() -> Scrift:
+    """Pre-configured Scrift client; register routes with respx in each test."""
+    return Scrift(api_key=TEST_API_KEY)
+
+
+@pytest.fixture
+def respx_mock() -> Iterator[respx.MockRouter]:
+    """Active respx router for the duration of a test."""
+    with respx.mock(assert_all_called=False) as router:
+        yield router
 
 
 # -- reusable response payloads -----------------------------------------------
@@ -50,3 +66,9 @@ ERROR_NOT_FOUND = {"error": "service_not_found", "message": "Service not found"}
 ERROR_AUTH = {"error": "invalid_api_key", "message": "Invalid API key"}
 ERROR_RATE_LIMIT = {"error": "rate_limit_exceeded", "message": "Too many requests"}
 ERROR_VALIDATION = {"error": "query_too_short", "message": "Query must be at least 2 characters"}
+
+RATE_HEADERS = {
+    "X-RateLimit-Limit": "1000",
+    "X-RateLimit-Remaining": "42",
+    "X-RateLimit-Reset": "1712592000",
+}

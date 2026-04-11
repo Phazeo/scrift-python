@@ -57,8 +57,6 @@ Thumbs.db
 .cursor/
 .cursorignore
 .cursorules
-CLAUDE.md
-claude.md
 .claude/
 .aider/
 .aider.tags.cache.v3/
@@ -82,3 +80,5 @@ dist/
 
 # docs
 docs/ENGINEERING_GOLDEN_STANDARD.md
+CLAUDE.md
+claude.md

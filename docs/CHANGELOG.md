@@ -7,6 +7,28 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-04-08
+
+### Added
+
+- `RasterResource` on the client as `client.raster` with `get_png` and `get_webp`
+  (`GET /v1/png/{slug}`, `GET /v1/webp/{slug}`) returning raw image bytes; optional
+  `size` and `variant` query parameters
+- `RateLimitInfo` (`limit`, `remaining`, `reset_at`) on all JSON response models,
+  parsed from `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+- `ScriftRateLimitError` (alias `RateLimitError`) with `retry_after: int | None` on
+  HTTP 429 after the automatic retry is exhausted
+- API key validation accepting `scrf_` + 8+ alphanumeric characters (plus legacy
+  `sk_live_` / `sk_test_` and other opaque key shapes)
+
+### Changed
+
+- **Breaking:** `RateLimitError.retry_after` is now `int | None` (was `float | None`)
+
+### Tests
+
+- HTTP tests use `respx` for mocking
+
 ## [0.1.0] - 2026-04-08
 
 ### Added
@@ -20,4 +42,4 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 - Exception hierarchy: `ScriftError`, `AuthenticationError`,
   `NotFoundError`, `RateLimitError`, `ValidationError`, `APIError`
 - 429 retry with Retry-After header support
-- Full test suite with pytest-httpx mocks
+- Full test suite with HTTP mocks

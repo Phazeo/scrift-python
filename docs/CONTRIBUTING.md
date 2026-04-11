@@ -39,7 +39,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the full layer breakdown.
 ### Never do this
 
 - Do not add business logic to `_http.py` - it is transport only
-- Do not make real HTTP calls in tests - use pytest-httpx mocks
+- Do not make real HTTP calls in tests - use respx mocks
 - Do not break existing method signatures without a major version bump
 - Do not add dependencies without discussion
 

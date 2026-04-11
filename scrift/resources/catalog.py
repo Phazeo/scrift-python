@@ -4,12 +4,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from scrift.models import BatchResponse, CatalogListResponse, SearchResponse, ServiceResponse
+from scrift._responses import (
+    batch_response_from_http,
+    catalog_list_response_from_http,
+    search_response_from_http,
+    service_response_from_http,
+)
 
 if TYPE_CHECKING:
     import builtins
 
     from scrift._http import HttpClient
+    from scrift.models import BatchResponse, CatalogListResponse, SearchResponse, ServiceResponse
 
 
 class CatalogResource:
@@ -21,7 +27,7 @@ class CatalogResource:
     def get(self, slug: str) -> ServiceResponse:
         """Get a single brand by slug."""
         response = self._http.get(f"/v1/catalog/{slug}")
-        return ServiceResponse.model_validate(response.json())
+        return service_response_from_http(response)
 
     def list(
         self,
@@ -32,12 +38,12 @@ class CatalogResource:
         """List catalog entries with pagination."""
         params: dict[str, object] = {"limit": limit, "offset": offset}
         response = self._http.get("/v1/catalog", params=params)
-        return CatalogListResponse.model_validate(response.json())
+        return catalog_list_response_from_http(response)
 
     def batch(self, slugs: builtins.list[str]) -> BatchResponse:
         """Look up multiple brands by slug (max 50)."""
         response = self._http.post("/v1/catalog/batch", json={"slugs": slugs})
-        return BatchResponse.model_validate(response.json())
+        return batch_response_from_http(response)
 
     def search(
         self,
@@ -50,4 +56,4 @@ class CatalogResource:
         if limit is not None:
             params["limit"] = limit
         response = self._http.get("/v1/search", params=params)
-        return SearchResponse.model_validate(response.json())
+        return search_response_from_http(response)

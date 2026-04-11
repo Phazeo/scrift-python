@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from scrift.models import BrandResponse
+from scrift._responses import brand_response_from_http
 
 if TYPE_CHECKING:
     from scrift._http import HttpClient
+    from scrift.models import BrandResponse
 
 
 class BrandResource:
@@ -19,4 +20,4 @@ class BrandResource:
     def get(self, domain: str) -> BrandResponse:
         """Look up a brand by its website domain."""
         response = self._http.get("/v1/brand", params={"domain": domain})
-        return BrandResponse.model_validate(response.json())
+        return brand_response_from_http(response)

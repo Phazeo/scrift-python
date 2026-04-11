@@ -35,11 +35,11 @@ class NotFoundError(ScriftError):
     """Raised on 404 - resource does not exist."""
 
 
-class RateLimitError(ScriftError):
-    """Raised on 429 - rate limit exceeded.
+class ScriftRateLimitError(ScriftError):
+    """Raised on 429 - rate limit exceeded after automatic retry is exhausted.
 
-    ``retry_after`` is the number of seconds to wait (from the Retry-After
-    header), or ``None`` if the header was absent.
+    ``retry_after`` is seconds to wait from the ``Retry-After`` header, or
+    ``None`` if the header was absent or unparsable.
     """
 
     def __init__(
@@ -48,10 +48,23 @@ class RateLimitError(ScriftError):
         *,
         status_code: int | None = None,
         error_code: str | None = None,
-        retry_after: float | None = None,
+        retry_after: int | None = None,
     ) -> None:
         super().__init__(message, status_code=status_code, error_code=error_code)
         self.retry_after = retry_after
+
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}("
+            f"message={self.message!r}, "
+            f"status_code={self.status_code}, "
+            f"error_code={self.error_code!r}, "
+            f"retry_after={self.retry_after!r})"
+        )
+
+
+# Backward-compatible alias (v0.1.0 name).
+RateLimitError = ScriftRateLimitError
 
 
 class ValidationError(ScriftError):
