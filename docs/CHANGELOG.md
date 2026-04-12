@@ -9,6 +9,12 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
 ## [0.2.2] - 2026-04-11
 
+### Changed
+
+- CI: publish workflow updated to 2026 standard — `actions/checkout@v6`,
+  `astral-sh/setup-uv@v7`, explicit Python 3.13, smoke test before publish,
+  Trusted Publishing via OIDC (no API token stored anywhere)
+
 ### Removed
 
 - Legacy `sk_` API key prefixes removed from validation.

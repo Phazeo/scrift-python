@@ -66,6 +66,38 @@ uv run pytest tests/ --cov=scrift --cov-report=term-missing --cov-fail-under=85 
 4. Open a PR against `main` with a clear description
 5. A maintainer will review within a few days
 
+## Releasing
+
+Releases are published to PyPI automatically via GitHub Actions using
+[Trusted Publishing](https://docs.pypi.org/trusted-publishers/) — no API
+token is stored anywhere.
+
+### Who can release
+
+Only maintainers with push access to `Phazeo/scrift-python` can trigger
+a release. All releases require manual approval in the `pypi` GitHub
+environment before publishing.
+
+### Release process
+
+1. Ensure all changes are merged to `main` and CI is green
+2. Bump the version in `pyproject.toml` and `scrift/__init__.py`
+3. Update `docs/CHANGELOG.md` with the new version entry
+4. Commit: `git commit -m "chore: bump version to vX.Y.Z"`
+5. Push to main: `git push origin main`
+6. Tag the release: `git tag vX.Y.Z && git push origin vX.Y.Z`
+7. GitHub Actions triggers automatically — go to the Actions tab
+8. Review and approve the `pypi` environment deployment
+9. Verify on PyPI: `pip install scrift==X.Y.Z`
+
+### Version format
+
+Follows [Semantic Versioning](https://semver.org/):
+
+- Patch `0.2.x` — bug fixes, non-breaking improvements
+- Minor `0.x.0` — new features, backward compatible
+- Major `x.0.0` — breaking API changes
+
 ## Reporting bugs
 
 Open a GitHub issue with:

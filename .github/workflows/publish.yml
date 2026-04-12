@@ -28,7 +28,7 @@ jobs:
         run: uv build
 
       - name: Smoke test
-        run: uv run --isolated --no-project --with dist/*.whl -c "import scrift; print(scrift.__version__)"
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import scrift; print(scrift.__version__)"
 
       - name: Publish
         run: uv publish
