@@ -1,6 +1,6 @@
 [project]
 name = "scrift"
-version = "0.2.2"
+version = "0.2.3"
 description = "Python SDK for the Scrift brand asset API"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -13,8 +13,8 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://scrift.app"
-Documentation = "https://scrift.app/docs"
-Repository = "https://github.com/scrift/scrift-python"
+Documentation = "https://docs.scrift.app"
+Repository = "https://github.com/Phazeo/scrift-python"
 
 [build-system]
 requires = ["hatchling"]

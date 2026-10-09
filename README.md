@@ -91,7 +91,7 @@ All exceptions inherit from `ScriftError` and carry `status_code`, `error_code`,
 ## Links
 
 - [Scrift](https://scrift.app)
-- [API Documentation](https://scrift.app/docs)
+- [API Documentation](https://docs.scrift.app)
 
 ## License
 
