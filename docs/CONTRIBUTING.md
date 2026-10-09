@@ -11,7 +11,7 @@ everything you need to get started.
 ## Setup
 
 ```bash
-git clone https://github.com/scrift/scrift-python.git
+git clone https://github.com/Phazeo/scrift-python.git
 cd scrift-python
 uv sync --all-extras
 ```

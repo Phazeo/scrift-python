@@ -13,8 +13,8 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://scrift.app"
-Documentation = "https://scrift.app/docs"
-Repository = "https://github.com/scrift/scrift-python"
+Documentation = "https://docs.scrift.app"
+Repository = "https://github.com/Phazeo/scrift-python"
 
 [build-system]
 requires = ["hatchling"]
