@@ -7,6 +7,21 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-10-09
+
+### Fixed
+
+- The package's `Repository` link pointed at `github.com/scrift/scrift-python`,
+  which does not exist. It is now `https://github.com/Phazeo/scrift-python`, and
+  so is the clone address in `docs/CONTRIBUTING.md`.
+- The `Documentation` link now points straight at `https://docs.scrift.app`
+  instead of `scrift.app/docs`, a page that redirects there.
+
+### Added
+
+- A test fails if the package metadata names any GitHub URL other than
+  `https://github.com/Phazeo/scrift-python`.
+
 ## [0.2.2] - 2026-04-11
 
 ### Changed
